@@ -1,0 +1,29 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null && request.auth.token.admin == true;
+    }
+
+    match /bookingEnquiries/{bookingId} {
+      // Public can submit enquiries only; customers cannot read or edit booking records.
+      allow create: if
+        request.resource.data.keys().hasAll([
+          'name', 'mobile', 'service', 'date', 'time',
+          'address', 'city', 'notes', 'status', 'createdAt'
+        ]) &&
+        request.resource.data.name is string &&
+        request.resource.data.name.size() > 0 &&
+        request.resource.data.mobile is string &&
+        request.resource.data.mobile.matches('^[6-9][0-9]{9}$') &&
+        request.resource.data.service is string &&
+        request.resource.data.address is string &&
+        request.resource.data.address.size() > 0 &&
+        request.resource.data.city is string &&
+        request.resource.data.city.size() > 0 &&
+        request.resource.data.status == 'new';
+
+      allow read, update, delete: if isAdmin();
+    }
+  }
+}

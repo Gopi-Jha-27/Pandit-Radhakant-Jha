@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Pandit Ji - RadhaKant Jha",
+    "slug": "pandit-radhakant-jha",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "platforms": ["android", "web"],
+    "android": {
+      "package": "in.panditradhakant.seva"
+    },
+    "web": { "bundler": "metro" }
+  }
+}
